@@ -1,7 +1,7 @@
 {
   "$schema": "https://schemas.wp.org/trunk/block.json",
   "apiVersion": 3,
-  "name": "sidemenu/sidemenu",
+  "name": "sidemenu-block/sidemenu",
   "version": "1.0",
   "title": "SideMenu Open Button",
   "category": "design",
@@ -93,7 +93,7 @@
     }
   },
   "selectors": {
-    "root": ".wp-block-sidemenu-sidemenu .sidemenu-open-button"
+    "root": ".wp-block-sidemenu-block-sidemenu .sidemenu-open-button"
   },
   "textdomain": "sidemenu-block",
   "editorStyle": "file:./index.css",

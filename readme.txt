@@ -1,7 +1,7 @@
 === SideMenu Block ===
 Contributors: domainsupport
 Donate link: https://webd.uk/product/sidemenu-block-upgrade/
-Tags: side menu, sliding menu, off canvas menu, mobile menu, sidebar menu
+Tags: block, side menu, sliding menu, off canvas menu, mobile menu
 Requires at least: 6.2
 Tested up to: 7.0
 Requires PHP: 5.6

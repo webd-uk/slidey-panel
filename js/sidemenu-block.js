@@ -2,7 +2,8 @@
     'use strict';
 
     const selectors = {
-        button: '.wp-block-sidemenu-sidemenu.sidemenu-block-mode[data-sidemenu-content-id] a',
+        button: '.wp-block-sidemenu-block-sidemenu.sidemenu-block-mode[data-sidemenu-content-id] a, .wp-block-sidemenu-sidemenu.sidemenu-block-mode[data-sidemenu-content-id] a',
+        wrapper: '.wp-block-sidemenu-block-sidemenu, .wp-block-sidemenu-sidemenu',
         panel: '.sidemenu-block-panel',
         cover: '.sidemenu-block-cover',
         close: '.sidemenu-block-close'
@@ -119,7 +120,7 @@
     };
 
     const openPanel = function(trigger) {
-        const wrapper = trigger.closest('.wp-block-sidemenu-sidemenu');
+        const wrapper = trigger.closest(selectors.wrapper);
         const contentId = wrapper ? wrapper.dataset.sidemenuContentId : '';
         const panel = contentId ? getPanel(contentId) : null;
         const cover = getCover();
@@ -244,7 +245,7 @@
             }
 
             window.setTimeout(function() {
-                const trigger = document.querySelector(`.wp-block-sidemenu-sidemenu.sidemenu-block-mode[data-sidemenu-content-id="${panelId}"] a`);
+                const trigger = document.querySelector(`.wp-block-sidemenu-block-sidemenu.sidemenu-block-mode[data-sidemenu-content-id="${panelId}"] a, .wp-block-sidemenu-sidemenu.sidemenu-block-mode[data-sidemenu-content-id="${panelId}"] a`);
 
                 if (trigger && !activePanel && !openedPanels.has(panel)) {
                     openPanel(trigger);

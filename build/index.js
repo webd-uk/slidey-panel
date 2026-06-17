@@ -23,16 +23,6 @@
     var getSpacingClassesAndStyles = wp.blockEditor.__experimentalGetSpacingClassesAndStyles;
     var getTypographyClassesAndStyles = wp.blockEditor.getTypographyClassesAndStyles;
 
-    function sideMenuBlockData() {
-        return window.sideMenuBlock || {
-            contentPosts: [],
-            defaultContentId: 0,
-            createContentUrl: '',
-            canCreateContent: false,
-            restNamespace: 'sidemenu/v1'
-        };
-    }
-
     function buttonTitle(attributes) {
         if ('undefined' === typeof attributes.title) {
             return __('SideMenu', 'sidemenu-block');
@@ -237,6 +227,10 @@
         var selectedContent = contentPostById(contentState.contentPosts, contentState.defaultContentId);
         var controls = [];
 
+        if (contentState.isLoading) {
+            return [el(Spinner)];
+        }
+
         if (contentState.contentPosts.length > 1) {
             controls.push(
                 el(SelectControl, {
@@ -301,7 +295,7 @@
         return controls;
     }
 
-    wp.blocks.registerBlockType('sidemenu/sidemenu', {
+    wp.blocks.registerBlockType('sidemenu-block/sidemenu', {
         icon: el(
             'svg',
             {
@@ -392,19 +386,19 @@
             }
         },
         selectors: {
-            root: '.wp-block-sidemenu-sidemenu .sidemenu-open-button'
+            root: '.wp-block-sidemenu-block-sidemenu .sidemenu-open-button'
         },
 
         edit: function(props) {
             var attributes = props.attributes;
             var setAttributes = props.setAttributes;
-            var initialData = sideMenuBlockData();
             var contentState = useState({
-                contentPosts: initialData.contentPosts || [],
-                defaultContentId: initialData.defaultContentId || 0,
-                createContentUrl: initialData.createContentUrl || '',
-                canCreateContent: initialData.canCreateContent || false,
-                restNamespace: initialData.restNamespace || 'sidemenu/v1',
+                contentPosts: [],
+                defaultContentId: 0,
+                createContentUrl: '',
+                canCreateContent: false,
+                restNamespace: 'sidemenu/v1',
+                isLoading: true,
                 isSaving: false
             });
             var contentData = contentState[0];
@@ -456,6 +450,27 @@
                 if ('block' !== attributes.mode) {
                     setAttributes({ mode: 'block' });
                 }
+            }, []);
+
+            useEffect(function() {
+                apiFetch({
+                    path: '/' + contentData.restNamespace + '/content'
+                }).then(function(response) {
+                    setContentData(function(currentContentData) {
+                        return Object.assign({}, currentContentData, {
+                            contentPosts: response.contentPosts || [],
+                            defaultContentId: response.defaultContentId || 0,
+                            createContentUrl: response.createContentUrl || '',
+                            canCreateContent: response.canCreateContent || false,
+                            restNamespace: response.restNamespace || currentContentData.restNamespace,
+                            isLoading: false
+                        });
+                    });
+                }).catch(function() {
+                    setContentData(function(currentContentData) {
+                        return Object.assign({}, currentContentData, { isLoading: false });
+                    });
+                });
             }, []);
 
             return el(

@@ -43,6 +43,8 @@
     min-width: var(--sidemenu-block-mobile-min-width, 0);
     height: var(--sidemenu-block-panel-custom-height, var(--sidemenu-block-panel-height, 100vh));
     border-radius: var(--sidemenu-block-border-radius, 0);
+    background: var(--wp--preset--color--base, var(--wp--preset--color--background, #fff));
+    color: var(--wp--preset--color--contrast, #111);
     overflow-x: hidden;
     overflow-y: auto;
     transform: translateX(100%);

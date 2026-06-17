@@ -49,7 +49,7 @@ SideMenu Block uses normal WordPress pages. Create or edit the page that should 
 
 = Can different buttons open different SideMenu pages? =
 
-The block uses one default SideMenu page.
+The block uses one default SideMenu page. SideMenu Block Premium adds per-button content controls.
 
 == Changelog ==
 

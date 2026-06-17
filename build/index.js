@@ -215,12 +215,15 @@
     }
 
     function contentOptions(contentPosts) {
-        return contentPosts.map(function(contentPost) {
+        return [{
+            label: __('Choose a page', 'sidemenu-block'),
+            value: '0'
+        }].concat(contentPosts.map(function(contentPost) {
             return {
                 label: contentPost.title,
                 value: String(contentPost.id)
             };
-        });
+        }));
     }
 
     function contentControls(contentState, setContentState) {
@@ -231,7 +234,7 @@
             return [el(Spinner)];
         }
 
-        if (contentState.contentPosts.length > 1) {
+        if (contentState.contentPosts.length && !selectedContent) {
             controls.push(
                 el(SelectControl, {
                     label: __('Default SideMenu page', 'sidemenu-block'),
@@ -264,6 +267,13 @@
             }
         }
 
+        if (!selectedContent && contentState.canCreateContent && contentState.createContentUrl) {
+            controls.push(el(Button, {
+                href: contentState.createContentUrl,
+                variant: contentState.contentPosts.length ? 'secondary' : 'primary'
+            }, __('Add SideMenu Page', 'sidemenu-block')));
+        }
+
         if (selectedContent) {
             if (selectedContent.editLink) {
                 controls.push(el(Button, {
@@ -276,12 +286,7 @@
                 );
             }
         } else if (!contentState.contentPosts.length) {
-            if (contentState.canCreateContent && contentState.createContentUrl) {
-                controls.push(el(Button, {
-                    href: contentState.createContentUrl,
-                    variant: 'primary'
-                }, __('Add SideMenu Page', 'sidemenu-block')));
-            } else {
+            if (!contentState.canCreateContent || !contentState.createContentUrl) {
                 controls.push(
                     el('p', null, __('An Editor or Administrator must create a page before this block can use it.', 'sidemenu-block'))
                 );

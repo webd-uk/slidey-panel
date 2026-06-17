@@ -99,7 +99,7 @@ if (!class_exists('sidemenu_block_class')) {
 
         }
 
-        public static function sidemenu_block_get_default_content_id($maybe_set = true) {
+        public static function sidemenu_block_get_default_content_id() {
 
             $content_id = absint(get_option(self::DEFAULT_CONTENT_OPTION));
 
@@ -109,15 +109,6 @@ if (!class_exists('sidemenu_block_class')) {
 
             if ($content_id) {
                 delete_option(self::DEFAULT_CONTENT_OPTION);
-            }
-
-            $content_posts = self::sidemenu_block_get_content_posts();
-
-            if ($maybe_set && $content_posts) {
-                $content_id = absint($content_posts[0]['id']);
-                update_option(self::DEFAULT_CONTENT_OPTION, $content_id, false);
-
-                return $content_id;
             }
 
             return 0;

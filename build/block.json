@@ -1,0 +1,101 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "sidemenu/sidemenu",
+  "version": "1.0",
+  "title": "SideMenu Open Button",
+  "category": "design",
+  "attributes": {
+    "title": {
+      "type": "string",
+      "default": "SideMenu"
+    },
+    "mode": {
+      "type": "string"
+    },
+    "contentId": {
+      "type": "number"
+    },
+    "buttonIcon": {
+      "type": "string",
+      "default": "title"
+    },
+    "menuIcon": {
+      "type": "string",
+      "default": "menu"
+    },
+    "justifyContent": {
+      "type": "string"
+    },
+    "style": {
+      "type": "object"
+    }
+  },
+  "description": "Block to show the open SideMenu button.",
+  "example": {
+    "example": {
+      "attributes": {
+        "title": "SideMenu",
+        "mode": "block"
+      }
+    }
+  },
+  "supports": {
+    "html": false,
+    "align": false,
+    "layout": false,
+    "color": {
+      "__experimentalSkipSerialization": true,
+      "text": true,
+      "background": true,
+      "gradients": true,
+      "link": true
+    },
+    "typography": {
+      "__experimentalSkipSerialization": [
+        "fontSize",
+        "lineHeight",
+        "fontFamily",
+        "fontStyle",
+        "fontWeight",
+        "letterSpacing",
+        "textDecoration",
+        "textTransform"
+      ],
+      "fontSize": true,
+      "lineHeight": true,
+      "fontFamily": true,
+      "fontStyle": true,
+      "fontWeight": true,
+      "letterSpacing": true,
+      "textDecoration": true,
+      "textTransform": true
+    },
+    "spacing": {
+      "__experimentalSkipSerialization": true,
+      "padding": true
+    },
+    "dimensions": {
+      "minHeight": true
+    },
+    "__experimentalBorder": {
+      "__experimentalSkipSerialization": true,
+      "__experimentalDefaultControls": {
+        "color": true,
+        "radius": true,
+        "style": true,
+        "width": true
+      },
+      "color": true,
+      "radius": true,
+      "style": true,
+      "width": true
+    }
+  },
+  "selectors": {
+    "root": ".wp-block-sidemenu-sidemenu .sidemenu-open-button"
+  },
+  "textdomain": "sidemenu-block",
+  "editorStyle": "file:./index.css",
+  "editorScript": "file:./index.js"
+}

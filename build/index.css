@@ -1,0 +1,32 @@
+.wp-block-sidemenu-sidemenu.sidemenu-block-mode {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.wp-block-sidemenu-sidemenu.sidemenu-block-mode.is-content-justification-center {
+    justify-content: center;
+}
+
+.wp-block-sidemenu-sidemenu.sidemenu-block-mode.is-content-justification-right {
+    justify-content: flex-end;
+}
+
+.wp-block-sidemenu-sidemenu .sidemenu-editor-button-preview,
+.wp-block-sidemenu-sidemenu .sidemenu-open-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35em;
+    line-height: 1;
+}
+
+.wp-block-sidemenu-sidemenu .sidemenu-open-button {
+    padding: 5px;
+}
+
+.wp-block-sidemenu-sidemenu .sidemenu-button-icon {
+    display: block;
+    flex: 0 0 auto;
+    width: 1em;
+    height: 1em;
+    fill: currentColor;
+}

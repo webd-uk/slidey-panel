@@ -50,7 +50,7 @@ if (!class_exists('sidemenu_block_class')) {
         const DEFAULT_CONTENT_OPTION = 'sidemenu_default_content_id';
         const CONTENT_POST_TYPE = 'page';
 
-        private $block_panels = array();
+        private $block_panel = '';
         private $rendering_sidemenu_content = false;
 
         public function sidemenu_block_load() {
@@ -90,6 +90,7 @@ if (!class_exists('sidemenu_block_class')) {
             foreach ($posts as $post) {
                 $content_posts[] = array(
                     'id' => absint($post->ID),
+                    /* translators: %d is the page ID. */
                     'title' => $post->post_title ? $post->post_title : sprintf(__('Page #%d', 'sidemenu-block'), absint($post->ID)),
                     'editLink' => current_user_can('edit_post', $post->ID) ? get_edit_post_link($post->ID, '') : '',
                 );
@@ -210,7 +211,23 @@ if (!class_exists('sidemenu_block_class')) {
                 $block_content = $processor->get_updated_html();
             }
 
-            $this->sidemenu_block_render_block_panel($content_id);
+            if ('' === $this->block_panel) {
+                $content = $this->sidemenu_block_render_content_post($content_id);
+
+                if ($content) {
+                    ob_start();
+
+?><section class="sidemenu-block-panel sidemenu-position-right" id="sidemenu-block-panel-<?php echo esc_attr($content_id); ?>" data-sidemenu-panel-id="<?php echo esc_attr($content_id); ?>" data-sidemenu-position="right" aria-hidden="true">
+    <button type="button" class="sidemenu-block-close" aria-label="<?php esc_attr_e('Close menu', 'sidemenu-block'); ?>"><svg class="sidemenu-block-close-icon" xmlns="http://www.w3.org/2000/svg" viewBox="3 3 18 18" aria-hidden="true" focusable="false"><path d="m13.06 12 4.22-4.22-1.06-1.06L12 10.94 7.78 6.72 6.72 7.78 10.94 12l-4.22 4.22 1.06 1.06L12 13.06l4.22 4.22 1.06-1.06L13.06 12Z" /></svg></button>
+    <div class="sidemenu-block-content"><?php
+        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Rendered by the_content.
+        echo $content;
+    ?></div>
+</section><?php
+
+                    $this->block_panel = ob_get_clean();
+                }
+            }
 
             return $block_content;
 
@@ -225,6 +242,7 @@ if (!class_exists('sidemenu_block_class')) {
             }
 
             $this->rendering_sidemenu_content = true;
+            // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Core content filter.
             $content = apply_filters('the_content', $content_post->post_content);
             $this->rendering_sidemenu_content = false;
 
@@ -232,47 +250,15 @@ if (!class_exists('sidemenu_block_class')) {
 
         }
 
-        public function sidemenu_block_render_block_panel($content_id) {
-
-            $content_id = absint($content_id);
-
-            if (!$content_id || isset($this->block_panels[$content_id])) {
-                return '';
-            }
-
-            $content = $this->sidemenu_block_render_content_post($content_id);
-
-            if (!$content) {
-                return '';
-            }
-
-            $this->block_panels[$content_id] = $this->sidemenu_block_get_panel_html($content_id, $content);
-
-            return '';
-
-        }
-
-        public function sidemenu_block_get_panel_html($content_id, $content) {
-
-            ob_start();
-
-?><section class="sidemenu-block-panel sidemenu-position-right" id="sidemenu-block-panel-<?php echo esc_attr($content_id); ?>" data-sidemenu-panel-id="<?php echo esc_attr($content_id); ?>" data-sidemenu-position="right" aria-hidden="true">
-    <button type="button" class="sidemenu-block-close" aria-label="<?php esc_attr_e('Close menu', 'sidemenu-block'); ?>"><svg class="sidemenu-block-close-icon" xmlns="http://www.w3.org/2000/svg" viewBox="3 3 18 18" aria-hidden="true" focusable="false"><path d="m13.06 12 4.22-4.22-1.06-1.06L12 10.94 7.78 6.72 6.72 7.78 10.94 12l-4.22 4.22 1.06 1.06L12 13.06l4.22 4.22 1.06-1.06L13.06 12Z" /></svg></button>
-    <div class="sidemenu-block-content"><?php echo $content; ?></div>
-</section><?php
-
-            return ob_get_clean();
-
-        }
-
         public function sidemenu_block_wp_footer() {
 
-            if (!$this->block_panels) {
+            if (!$this->block_panel) {
                 return;
             }
 
 ?><div class="sidemenu-block-panels">
-<?php foreach ($this->block_panels as $panel) { echo $panel; } ?>
+<?php // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Generated panel markup.
+            echo $this->block_panel; ?>
 </div>
 <div class="sidemenu-block-cover" hidden></div><?php
 

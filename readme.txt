@@ -54,11 +54,9 @@ The block uses one default SideMenu page.
 == Changelog ==
 
 = 1.0 =
-* Added the SideMenu Open Button block.
-* Added default SideMenu page selection in the block editor.
-* Added responsive sliding panel output for the selected page.
+* First version of the plugin
 
 == Upgrade Notice ==
 
 = 1.0 =
-SideMenu Block adds a block-based sliding SideMenu using normal WordPress pages as panel content.
+* First version of the plugin

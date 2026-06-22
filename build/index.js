@@ -288,9 +288,6 @@
                 type: 'string',
                 default: 'block'
             },
-            contentId: {
-                type: 'number'
-            },
             buttonIcon: {
                 type: 'string',
                 default: 'title'

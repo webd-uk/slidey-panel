@@ -13,9 +13,6 @@
     "mode": {
       "type": "string"
     },
-    "contentId": {
-      "type": "number"
-    },
     "buttonIcon": {
       "type": "string",
       "default": "title"

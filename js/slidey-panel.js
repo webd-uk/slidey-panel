@@ -245,7 +245,7 @@
             }
 
             window.setTimeout(function() {
-                const trigger = document.querySelector(`.wp-block-slidey-panel-panel.slidey-panel-mode[data-slidey-panel-content-id="${panelId}"] a, .wp-block-slidey-panel-panel.slidey-panel-mode[data-slidey-panel-content-id="${panelId}"] a`);
+                const trigger = document.querySelector(`.wp-block-slidey-panel-panel.slidey-panel-mode[data-slidey-panel-content-id="${panelId}"] a`);
 
                 if (trigger && !activePanel && !openedPanels.has(panel)) {
                     openPanel(trigger);

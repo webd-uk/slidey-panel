@@ -13,11 +13,6 @@
     var useEffect = wp.element.useEffect;
     var useState = wp.element.useState;
     var apiFetch = wp.apiFetch;
-    var applyFilters = wp.hooks && wp.hooks.applyFilters
-        ? wp.hooks.applyFilters
-        : function(hookName, value) {
-            return value;
-        };
     var getBorderClassesAndStyles = wp.blockEditor.__experimentalGetBorderClassesAndStyles;
     var getColorClassesAndStyles = wp.blockEditor.__experimentalGetColorClassesAndStyles;
     var getSpacingClassesAndStyles = wp.blockEditor.__experimentalGetSpacingClassesAndStyles;
@@ -25,7 +20,7 @@
 
     function buttonTitle(attributes) {
         if ('undefined' === typeof attributes.title) {
-            return __('SideMenu', 'sidemenu-block');
+            return __('Slidey Panel', 'slidey-panel');
         }
 
         return attributes.title;
@@ -33,7 +28,7 @@
 
     function editorButtonTitle(attributes) {
         if ('' === buttonTitle(attributes) && 'icon' !== (attributes.buttonIcon || 'title')) {
-            return __('SideMenu', 'sidemenu-block');
+            return __('Slidey Panel', 'slidey-panel');
         }
 
         return buttonTitle(attributes);
@@ -55,7 +50,7 @@
 
         return {
             className: classNames(
-                'sidemenu-open-button',
+                'slidey-panel-open-button',
                 borderProps.className,
                 colorProps.className,
                 spacingProps.className,
@@ -73,7 +68,7 @@
     function editorButtonPreviewProps(attributes) {
         var props = getButtonSupportProps(attributes);
 
-        props.className = classNames('sidemenu-editor-button-preview', props.className);
+        props.className = classNames('slidey-panel-editor-button-preview', props.className);
 
         if ('' === buttonTitle(attributes) && 'icon' !== (attributes.buttonIcon || 'title')) {
             props.style = mergeObjects(props.style, { color: '#757575' });
@@ -82,7 +77,7 @@
         return props;
     }
 
-    function menuIcon(attributes, context) {
+    function menuIcon(attributes) {
         var icon = attributes.menuIcon || 'menu';
         var iconElement;
 
@@ -90,7 +85,7 @@
             iconElement = el(
                 'svg',
                 {
-                    className: 'sidemenu-button-icon',
+                    className: 'slidey-panel-button-icon',
                     xmlns: 'http://www.w3.org/2000/svg',
                     viewBox: '0 0 24 24',
                     width: '1em',
@@ -104,7 +99,7 @@
             iconElement = el(
                 'svg',
                 {
-                    className: 'sidemenu-button-icon',
+                    className: 'slidey-panel-button-icon',
                     xmlns: 'http://www.w3.org/2000/svg',
                     viewBox: '0 0 24 24',
                     width: '1em',
@@ -117,29 +112,24 @@
             );
         }
 
-        return applyFilters(
-            'sidemenu.openButtonIcon',
-            iconElement,
-            attributes,
-            context || 'save'
-        );
+        return iconElement;
     }
 
-    function buttonContents(attributes, context) {
+    function buttonContents(attributes) {
         var icon = attributes.buttonIcon || 'title';
         var title = buttonTitle(attributes);
         var contents = [];
 
         if ('icon' === icon || 'left' === icon) {
-            contents.push(menuIcon(attributes, context));
+            contents.push(menuIcon(attributes));
         }
 
         if ('icon' !== icon) {
-            contents.push(el('span', { className: 'sidemenu-button-title' }, title));
+            contents.push(el('span', { className: 'slidey-panel-button-title' }, title));
         }
 
         if ('right' === icon) {
-            contents.push(menuIcon(attributes, context));
+            contents.push(menuIcon(attributes));
         }
 
         return contents;
@@ -152,7 +142,7 @@
         linkProps.href = '#';
 
         if ('icon' === (attributes.buttonIcon || 'title')) {
-            linkProps['aria-label'] = title || __('Open menu', 'sidemenu-block');
+            linkProps['aria-label'] = title || __('Open menu', 'slidey-panel');
         }
 
         return linkProps;
@@ -162,47 +152,25 @@
         var justifyContent = attributes.justifyContent;
 
         return classNames(
-            'sidemenu-block-mode',
+            'slidey-panel-mode',
             ('center' === justifyContent || 'right' === justifyContent)
                 ? 'is-content-justification-' + justifyContent
                 : ''
         );
     }
 
-    function sidemenuButtonSave(attributes) {
+    function slideyPanelButtonSave(attributes) {
         return el(
             'div',
             wp.blockEditor.useBlockProps.save({
                 className: blockClassName(attributes),
-                'data-sidemenu-mode': 'block'
+                'data-slidey-panel-mode': 'block'
             }),
             el(
                 'a',
                 buttonLinkProps(attributes),
                 buttonContents(attributes)
             )
-        );
-    }
-
-    function legacyBlockDivSave(attributes) {
-        return el(
-            'div',
-            wp.blockEditor.useBlockProps.save({
-                className: 'open_sidemenu sidemenu-block-mode',
-                'data-sidemenu-mode': 'block'
-            }),
-            el('a', { href: '#' }, buttonTitle(attributes))
-        );
-    }
-
-    function legacyBlockSpanSave(attributes) {
-        return el(
-            'span',
-            {
-                className: 'wp-block-sidemenu-sidemenu open_sidemenu sidemenu-block-mode',
-                'data-sidemenu-mode': 'block'
-            },
-            el('a', { href: '#' }, buttonTitle(attributes))
         );
     }
 
@@ -216,7 +184,7 @@
 
     function contentOptions(contentPosts) {
         return [{
-            label: __('Choose a page', 'sidemenu-block'),
+            label: __('Choose a page', 'slidey-panel'),
             value: '0'
         }].concat(contentPosts.map(function(contentPost) {
             return {
@@ -237,7 +205,7 @@
         if (contentState.contentPosts.length && !selectedContent) {
             controls.push(
                 el(SelectControl, {
-                    label: __('Default SideMenu page', 'sidemenu-block'),
+                    label: __('Default Slidey Panel page', 'slidey-panel'),
                     value: String(contentState.defaultContentId || 0),
                     options: contentOptions(contentState.contentPosts),
                     onChange: function(value) {
@@ -271,7 +239,7 @@
             controls.push(el(Button, {
                 href: contentState.createContentUrl,
                 variant: contentState.contentPosts.length ? 'secondary' : 'primary'
-            }, __('Add SideMenu Page', 'sidemenu-block')));
+            }, __('Add Slidey Panel Page', 'slidey-panel')));
         }
 
         if (selectedContent) {
@@ -279,28 +247,28 @@
                 controls.push(el(Button, {
                     href: selectedContent.editLink,
                     variant: 'secondary'
-                }, __('Edit SideMenu Page', 'sidemenu-block')));
+                }, __('Edit Slidey Panel Page', 'slidey-panel')));
             } else {
                 controls.push(
-                    el('p', null, __('You can use this page, but an Editor or Administrator must edit it.', 'sidemenu-block'))
+                    el('p', null, __('You can use this page, but an Editor or Administrator must edit it.', 'slidey-panel'))
                 );
             }
         } else if (!contentState.contentPosts.length) {
             if (!contentState.canCreateContent || !contentState.createContentUrl) {
                 controls.push(
-                    el('p', null, __('An Editor or Administrator must create a page before this block can use it.', 'sidemenu-block'))
+                    el('p', null, __('An Editor or Administrator must create a page before this block can use it.', 'slidey-panel'))
                 );
             }
         } else {
             controls.push(
-                el('p', null, __('Choose the default page used by SideMenu blocks.', 'sidemenu-block'))
+                el('p', null, __('Choose the default page used by Slidey Panel blocks.', 'slidey-panel'))
             );
         }
 
         return controls;
     }
 
-    wp.blocks.registerBlockType('sidemenu-block/sidemenu', {
+    wp.blocks.registerBlockType('slidey-panel/panel', {
         icon: el(
             'svg',
             {
@@ -314,7 +282,7 @@
         attributes: {
             title: {
                 type: 'string',
-                default: __('SideMenu', 'sidemenu-block')
+                default: __('Slidey Panel', 'slidey-panel')
             },
             mode: {
                 type: 'string',
@@ -391,7 +359,7 @@
             }
         },
         selectors: {
-            root: '.wp-block-sidemenu-block-sidemenu .sidemenu-open-button'
+            root: '.wp-block-slidey-panel-panel .slidey-panel-open-button'
         },
 
         edit: function(props) {
@@ -402,7 +370,7 @@
                 defaultContentId: 0,
                 createContentUrl: '',
                 canCreateContent: false,
-                restNamespace: 'sidemenu/v1',
+                restNamespace: 'slidey-panel/v1',
                 isLoading: true,
                 isSaving: false
             });
@@ -413,7 +381,7 @@
             });
             var panelControls = [
                 el(TextControl, {
-                    label: __('Open Button Title', 'sidemenu-block'),
+                    label: __('Open Button Title', 'slidey-panel'),
                     value: attributes.title,
                     onChange: function(title) {
                         var nextAttributes = { title: title };
@@ -426,24 +394,24 @@
                     }
                 }),
                 el(SelectControl, {
-                    label: __('Open Button Display', 'sidemenu-block'),
+                    label: __('Open Button Display', 'slidey-panel'),
                     value: attributes.buttonIcon || 'title',
                     options: [
-                        { label: __('Title only', 'sidemenu-block'), value: 'title' },
-                        { label: __('Icon', 'sidemenu-block'), value: 'icon' },
-                        { label: __('Icon to the left of title', 'sidemenu-block'), value: 'left' },
-                        { label: __('Icon to the right of title', 'sidemenu-block'), value: 'right' }
+                        { label: __('Title only', 'slidey-panel'), value: 'title' },
+                        { label: __('Icon', 'slidey-panel'), value: 'icon' },
+                        { label: __('Icon to the left of title', 'slidey-panel'), value: 'left' },
+                        { label: __('Icon to the right of title', 'slidey-panel'), value: 'right' }
                     ],
                     onChange: function(buttonIcon) {
                         setAttributes({ buttonIcon: buttonIcon });
                     }
                 }),
                 'title' !== (attributes.buttonIcon || 'title') && el(SelectControl, {
-                    label: __('Hamburger Icon', 'sidemenu-block'),
+                    label: __('Hamburger Icon', 'slidey-panel'),
                     value: attributes.menuIcon || 'menu',
                     options: [
-                        { label: __('Two lines', 'sidemenu-block'), value: 'handle' },
-                        { label: __('Three lines', 'sidemenu-block'), value: 'menu' }
+                        { label: __('Two lines', 'slidey-panel'), value: 'handle' },
+                        { label: __('Three lines', 'slidey-panel'), value: 'menu' }
                     ],
                     onChange: function(menuIconValue) {
                         setAttributes({ menuIcon: menuIconValue });
@@ -500,7 +468,7 @@
                     el(
                         'span',
                         editorButtonPreviewProps(attributes),
-                        buttonContents(Object.assign({}, attributes, { title: editorButtonTitle(attributes) }), 'editor')
+                        buttonContents(Object.assign({}, attributes, { title: editorButtonTitle(attributes) }))
                     )
                 ),
                 el(
@@ -508,7 +476,7 @@
                     null,
                     el(
                         PanelBody,
-                        { title: __('SideMenu Open Button', 'sidemenu-block'), initialOpen: true },
+                        { title: __('Slidey Panel', 'slidey-panel'), initialOpen: true },
                         panelControls
                     )
                 )
@@ -516,152 +484,7 @@
         },
 
         save: function(props) {
-            return sidemenuButtonSave(Object.assign({}, props.attributes, { mode: 'block' }));
-        },
-
-        deprecated: [
-            {
-                attributes: {
-                    title: {
-                        type: 'string',
-                        default: __('SideMenu', 'sidemenu-block')
-                    },
-                    mode: {
-                        type: 'string'
-                    },
-                    contentId: {
-                        type: 'number'
-                    },
-                    buttonIcon: {
-                        type: 'string',
-                        default: 'title'
-                    },
-                    menuIcon: {
-                        type: 'string',
-                        default: 'menu'
-                    },
-                    style: {
-                        type: 'object'
-                    }
-                },
-                save: function(props) {
-                    return el(
-                        'div',
-                        wp.blockEditor.useBlockProps.save({
-                            className: 'open_sidemenu sidemenu-block-mode',
-                            'data-sidemenu-mode': 'block'
-                        }),
-                        el('a', buttonLinkProps(props.attributes), buttonContents(props.attributes))
-                    );
-                },
-                isEligible: function(attributes) {
-                    return 'block' === attributes.mode;
-                },
-                migrate: function(attributes) {
-                    return Object.assign({}, attributes, {
-                        title: buttonTitle(attributes),
-                        mode: 'block',
-                        buttonIcon: attributes.buttonIcon || 'title',
-                        menuIcon: attributes.menuIcon || 'menu'
-                    });
-                }
-            },
-            {
-                attributes: {
-                    title: {
-                        type: 'string',
-                        default: __('SideMenu', 'sidemenu-block')
-                    },
-                    mode: {
-                        type: 'string'
-                    },
-                    contentId: {
-                        type: 'number'
-                    },
-                    buttonIcon: {
-                        type: 'string',
-                        default: 'title'
-                    },
-                    menuIcon: {
-                        type: 'string',
-                        default: 'menu'
-                    }
-                },
-                save: function(props) {
-                    return el(
-                        'div',
-                        wp.blockEditor.useBlockProps.save({
-                            className: 'open_sidemenu sidemenu-block-mode',
-                            'data-sidemenu-mode': 'block'
-                        }),
-                        el('a', buttonLinkProps(props.attributes), buttonContents(props.attributes))
-                    );
-                },
-                isEligible: function(attributes) {
-                    return 'block' === attributes.mode;
-                },
-                migrate: function(attributes) {
-                    return {
-                        title: buttonTitle(attributes),
-                        mode: 'block',
-                        buttonIcon: attributes.buttonIcon || 'title',
-                        menuIcon: attributes.menuIcon || 'menu'
-                    };
-                }
-            },
-            {
-                attributes: {
-                    title: {
-                        type: 'string',
-                        default: __('SideMenu', 'sidemenu-block')
-                    },
-                    mode: {
-                        type: 'string'
-                    },
-                    contentId: {
-                        type: 'number'
-                    }
-                },
-                save: function(props) {
-                    return legacyBlockDivSave(props.attributes);
-                },
-                isEligible: function(attributes) {
-                    return 'block' === attributes.mode;
-                },
-                migrate: function(attributes) {
-                    return {
-                        title: buttonTitle(attributes),
-                        mode: 'block',
-                        buttonIcon: 'title',
-                        menuIcon: 'menu'
-                    };
-                }
-            },
-            {
-                attributes: {
-                    title: {
-                        type: 'string',
-                        default: __('SideMenu', 'sidemenu-block')
-                    },
-                    mode: {
-                        type: 'string'
-                    }
-                },
-                save: function(props) {
-                    return legacyBlockSpanSave(props.attributes);
-                },
-                isEligible: function(attributes) {
-                    return 'block' === attributes.mode;
-                },
-                migrate: function(attributes) {
-                    return {
-                        title: buttonTitle(attributes),
-                        mode: 'block',
-                        buttonIcon: 'title',
-                        menuIcon: 'menu'
-                    };
-                }
-            }
-        ]
+            return slideyPanelButtonSave(Object.assign({}, props.attributes, { mode: 'block' }));
+        }
     });
 })(window.wp);

@@ -1,29 +1,29 @@
-:is(.wp-block-sidemenu-block-sidemenu, .wp-block-sidemenu-sidemenu).sidemenu-block-mode {
+.wp-block-slidey-panel-panel.slidey-panel-mode {
     display: flex;
     justify-content: flex-start;
 }
 
-:is(.wp-block-sidemenu-block-sidemenu, .wp-block-sidemenu-sidemenu).sidemenu-block-mode.is-content-justification-center {
+.wp-block-slidey-panel-panel.slidey-panel-mode.is-content-justification-center {
     justify-content: center;
 }
 
-:is(.wp-block-sidemenu-block-sidemenu, .wp-block-sidemenu-sidemenu).sidemenu-block-mode.is-content-justification-right {
+.wp-block-slidey-panel-panel.slidey-panel-mode.is-content-justification-right {
     justify-content: flex-end;
 }
 
-:is(.wp-block-sidemenu-block-sidemenu, .wp-block-sidemenu-sidemenu) .sidemenu-editor-button-preview,
-:is(.wp-block-sidemenu-block-sidemenu, .wp-block-sidemenu-sidemenu) .sidemenu-open-button {
+.wp-block-slidey-panel-panel .slidey-panel-editor-button-preview,
+.wp-block-slidey-panel-panel .slidey-panel-open-button {
     display: inline-flex;
     align-items: center;
     gap: 0.35em;
     line-height: 1;
 }
 
-:is(.wp-block-sidemenu-block-sidemenu, .wp-block-sidemenu-sidemenu) .sidemenu-open-button {
+.wp-block-slidey-panel-panel .slidey-panel-open-button {
     padding: 5px;
 }
 
-:is(.wp-block-sidemenu-block-sidemenu, .wp-block-sidemenu-sidemenu) .sidemenu-button-icon {
+.wp-block-slidey-panel-panel .slidey-panel-button-icon {
     display: block;
     flex: 0 0 auto;
     width: 1em;

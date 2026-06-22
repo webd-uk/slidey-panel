@@ -2,11 +2,11 @@
     'use strict';
 
     const selectors = {
-        button: '.wp-block-sidemenu-block-sidemenu.sidemenu-block-mode[data-sidemenu-content-id] a, .wp-block-sidemenu-sidemenu.sidemenu-block-mode[data-sidemenu-content-id] a',
-        wrapper: '.wp-block-sidemenu-block-sidemenu, .wp-block-sidemenu-sidemenu',
-        panel: '.sidemenu-block-panel',
-        cover: '.sidemenu-block-cover',
-        close: '.sidemenu-block-close'
+        button: '.wp-block-slidey-panel-panel.slidey-panel-mode[data-slidey-panel-content-id] a',
+        wrapper: '.wp-block-slidey-panel-panel',
+        panel: '.slidey-panel-panel',
+        cover: '.slidey-panel-cover',
+        close: '.slidey-panel-close'
     };
 
     let activePanel = null;
@@ -14,10 +14,10 @@
     let currentScroll = 0;
     const openedPanels = new WeakSet();
 
-    const labels = window.sideMenuBlockFrontend || {};
+    const labels = window.slideyPanelFrontend || {};
 
     const getPanel = function(contentId) {
-        return document.querySelector(`${selectors.panel}[data-sidemenu-panel-id="${contentId}"]`);
+        return document.querySelector(`${selectors.panel}[data-slidey-panel-id="${contentId}"]`);
     };
 
     const getCover = function() {
@@ -33,7 +33,7 @@
     };
 
     const getSpecifiedTextColor = function(panel) {
-        const content = panel.querySelector('.sidemenu-block-content');
+        const content = panel.querySelector('.slidey-panel-content');
         const colorElements = content ? content.querySelectorAll('.has-text-color, [style*="color"]') : [];
 
         for (const element of colorElements) {
@@ -60,7 +60,7 @@
     };
 
     const preparePanelScrollContainer = function(panel) {
-        const content = panel.querySelector('.sidemenu-block-content');
+        const content = panel.querySelector('.slidey-panel-content');
         const container = content ? content.firstElementChild : null;
         const minHeight = container && container.style ? container.style.minHeight : '';
 
@@ -71,8 +71,8 @@
             return;
         }
 
-        container.style.setProperty('--sidemenu-block-content-height', minHeight || '100%');
-        container.classList.add('sidemenu-block-scroll-container');
+        container.style.setProperty('--slidey-panel-content-height', minHeight || '100%');
+        container.classList.add('slidey-panel-scroll-container');
         content.classList.add('has-scroll-container');
         panel.classList.add('has-content-scroll-container');
     };
@@ -100,7 +100,7 @@
             cover.classList.remove('is-open');
         }
 
-        document.body.classList.remove('sidemenu-block-is-open');
+        document.body.classList.remove('slidey-panel-is-open');
 
         if (lastTrigger) {
             lastTrigger.classList.remove('is-open');
@@ -121,7 +121,7 @@
 
     const openPanel = function(trigger) {
         const wrapper = trigger.closest(selectors.wrapper);
-        const contentId = wrapper ? wrapper.dataset.sidemenuContentId : '';
+        const contentId = wrapper ? wrapper.dataset.slideyPanelContentId : '';
         const panel = contentId ? getPanel(contentId) : null;
         const cover = getCover();
 
@@ -139,10 +139,10 @@
         openedPanels.add(panel);
 
         cover.style.setProperty(
-            '--sidemenu-block-transition-duration',
-            window.getComputedStyle(panel).getPropertyValue('--sidemenu-block-transition-duration') || '0.2s'
+            '--slidey-panel-transition-duration',
+            window.getComputedStyle(panel).getPropertyValue('--slidey-panel-transition-duration') || '0.2s'
         );
-        cover.style.backgroundColor = panel.dataset.sidemenuCoverColor || 'rgba(0, 0, 0, 0.6)';
+        cover.style.backgroundColor = panel.dataset.slideyPanelCoverColor || 'rgba(0, 0, 0, 0.6)';
         cover.hidden = false;
         cover.classList.add('is-open');
         panel.classList.add('is-open');
@@ -150,7 +150,7 @@
         preparePanelCloseColor(panel);
         trigger.classList.add('is-open');
         trigger.setAttribute('aria-expanded', 'true');
-        document.body.classList.add('sidemenu-block-is-open');
+        document.body.classList.add('slidey-panel-is-open');
 
         const closeButton = panel.querySelector(selectors.close);
 
@@ -207,7 +207,7 @@
 
         if (
             event.target.matches(selectors.cover) &&
-            panelBoolean(activePanel, 'sidemenuCoverClickClose', true)
+            panelBoolean(activePanel, 'slideyPanelCoverClickClose', true)
         ) {
             event.preventDefault();
             closePanel({ restoreFocus: false });
@@ -228,7 +228,7 @@
         if (
             activePanel &&
             'INPUT' !== activeTag &&
-            panelBoolean(activePanel, 'sidemenuScrollClose', true) &&
+            panelBoolean(activePanel, 'slideyPanelScrollClose', true) &&
             Math.abs(nextScroll - currentScroll) > 400
         ) {
             closePanel({ restoreFocus: false });
@@ -237,15 +237,15 @@
 
     const prepareAutoOpenPanels = function() {
         document.querySelectorAll(selectors.panel).forEach(function(panel) {
-            const delay = parseInt(panel.dataset.sidemenuAutoOpenDelay || '0', 10) || 0;
-            const panelId = panel.dataset.sidemenuPanelId;
+            const delay = parseInt(panel.dataset.slideyPanelAutoOpenDelay || '0', 10) || 0;
+            const panelId = panel.dataset.slideyPanelId;
 
-            if (!panelBoolean(panel, 'sidemenuAutoOpen', false) || !panelId) {
+            if (!panelBoolean(panel, 'slideyPanelAutoOpen', false) || !panelId) {
                 return;
             }
 
             window.setTimeout(function() {
-                const trigger = document.querySelector(`.wp-block-sidemenu-block-sidemenu.sidemenu-block-mode[data-sidemenu-content-id="${panelId}"] a, .wp-block-sidemenu-sidemenu.sidemenu-block-mode[data-sidemenu-content-id="${panelId}"] a`);
+                const trigger = document.querySelector(`.wp-block-slidey-panel-panel.slidey-panel-mode[data-slidey-panel-content-id="${panelId}"] a, .wp-block-slidey-panel-panel.slidey-panel-mode[data-slidey-panel-content-id="${panelId}"] a`);
 
                 if (trigger && !activePanel && !openedPanels.has(panel)) {
                     openPanel(trigger);

@@ -1,14 +1,14 @@
 {
   "$schema": "https://schemas.wp.org/trunk/block.json",
   "apiVersion": 3,
-  "name": "sidemenu-block/sidemenu",
+  "name": "slidey-panel/panel",
   "version": "1.0",
-  "title": "SideMenu Open Button",
+  "title": "Slidey Panel",
   "category": "design",
   "attributes": {
     "title": {
       "type": "string",
-      "default": "SideMenu"
+      "default": "Slidey Panel"
     },
     "mode": {
       "type": "string"
@@ -31,11 +31,11 @@
       "type": "object"
     }
   },
-  "description": "Block to show the open SideMenu button.",
+  "description": "Shows a button that opens a sliding panel.",
   "example": {
     "example": {
       "attributes": {
-        "title": "SideMenu",
+        "title": "Slidey Panel",
         "mode": "block"
       }
     }
@@ -93,9 +93,9 @@
     }
   },
   "selectors": {
-    "root": ".wp-block-sidemenu-block-sidemenu .sidemenu-open-button"
+    "root": ".wp-block-slidey-panel-panel .slidey-panel-open-button"
   },
-  "textdomain": "sidemenu-block",
+  "textdomain": "slidey-panel",
   "editorStyle": "file:./index.css",
   "editorScript": "file:./index.js"
 }

@@ -49,6 +49,12 @@ if (!class_exists('slidey_panel_class')) {
 
         }
 
+        public static function slidey_panel_can_manage_default_content() {
+
+            return current_user_can('manage_options');
+
+        }
+
         public static function slidey_panel_get_content_posts() {
 
             $content_posts = array();
@@ -109,7 +115,7 @@ if (!class_exists('slidey_panel_class')) {
                 array(
                     'methods' => 'POST',
                     'callback' => array($this, 'slidey_panel_rest_set_default_content'),
-                    'permission_callback' => array(__CLASS__, 'slidey_panel_can_use_block'),
+                    'permission_callback' => array(__CLASS__, 'slidey_panel_can_manage_default_content'),
                     'args' => array(
                         'contentId' => array(
                             'type' => 'integer',
@@ -130,6 +136,7 @@ if (!class_exists('slidey_panel_class')) {
                     'defaultContentId' => self::slidey_panel_get_default_content_id(),
                     'createContentUrl' => admin_url('post-new.php?post_type=' . self::CONTENT_POST_TYPE),
                     'canCreateContent' => true,
+                    'canManageDefaultContent' => self::slidey_panel_can_manage_default_content(),
                 )
             );
 

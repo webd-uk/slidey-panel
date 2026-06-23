@@ -202,6 +202,12 @@
             return [el(Spinner)];
         }
 
+        if (!contentState.canManageDefaultContent) {
+            return [
+                el('p', null, __('You do not have sufficient permission to choose the content page for the Slidey Panel.', 'slidey-panel'))
+            ];
+        }
+
         if (contentState.contentPosts.length && !selectedContent) {
             controls.push(
                 el(SelectControl, {
@@ -367,6 +373,7 @@
                 defaultContentId: 0,
                 createContentUrl: '',
                 canCreateContent: false,
+                canManageDefaultContent: false,
                 restNamespace: 'slidey-panel/v1',
                 isLoading: true,
                 isSaving: false
@@ -432,6 +439,7 @@
                             defaultContentId: response.defaultContentId || 0,
                             createContentUrl: response.createContentUrl || '',
                             canCreateContent: response.canCreateContent || false,
+                            canManageDefaultContent: response.canManageDefaultContent || false,
                             restNamespace: response.restNamespace || currentContentData.restNamespace,
                             isLoading: false
                         });

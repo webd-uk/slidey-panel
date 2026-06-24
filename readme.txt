@@ -17,6 +17,8 @@ Slidey Panel adds an off-canvas panel that slides in from the side of your site 
 
 The block uses a normal published page for panel content. Create a page with the blocks you want to show, then add the "Slidey Panel" block wherever visitors should be able to open it.
 
+Add Slidey Panel to a block theme's Header template to provide a compact menu button, then build its navigation with WordPress blocks in the panel page.
+
 = Key features =
 
 * Slidey Panel block for posts, pages, templates and template parts.
